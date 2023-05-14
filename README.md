@@ -1,4 +1,5 @@
-# MidJourney x discord.py x Next.js
+# disJourney
+### MidJourney x discord.py x Next.js
 
 This repository is a practical implementation of discord.py and Next.js technologies, aimed at streamlining the process
 of viewing the upscaled images from Midjourney.
