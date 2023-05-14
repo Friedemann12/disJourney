@@ -1,0 +1,42 @@
+body {
+    margin: 0;
+    background-color: #0000db;
+    color: white;
+    overflow: hidden;
+}
+
+.imageContainer {
+
+}
+
+.image {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+    height: 100vh;
+}
+
+.prompt {
+    position: absolute;
+    width: 550px;
+    padding: 20px;
+    font-size: 28px;
+    z-index: 999999;
+}
+
+.prompting {
+    background-color: #0000db
+}
+
+.refreshButton {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border: none;
+    background-color: transparent;
+    width: 25px;
+}
+.intro{
+    font-weight: bold;
+}

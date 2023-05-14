@@ -1,0 +1,6 @@
+*.iml
+disJourney.iml
+.idea
+.env
+/discordBot/.env
+db.json
