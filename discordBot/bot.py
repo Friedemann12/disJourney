@@ -1,10 +1,11 @@
 import datetime
 import os
 import discord
-# from discord.ext import tasks
+from discord.ext import tasks
 from dotenv import load_dotenv
 from pysondb import db
 import pytz
+import requests
 
 tz = pytz.timezone('Europe/Berlin')
 
@@ -17,19 +18,19 @@ client = discord.Client(intents=intents)
 @client.event
 async def on_ready():
     print("Bot is ready")
-    await save()
-    await client.close()
+    await save.start()
+    # await client.close()
 
-
-time = datetime.time(hour=8, minute=30, tzinfo=tz)
 
 yesterday = datetime.datetime.today().now().replace(hour=0, second=0, microsecond=0, minute=0) - datetime.timedelta(
-    days=3)
+    days=1)
 print(yesterday)
 
 
-# @tasks.loop(time=time)
-async def save(limit=50, after=yesterday):
+@tasks.loop(hours=1.0)
+async def save(limit=None, after=yesterday):
+    url = "http://localhost:3000/api/images/loadJson"
+    a.deleteAll()
     channelsId = CHANNELS
     for channelId in channelsId:
         channel = client.get_channel(int(channelId))
@@ -50,6 +51,8 @@ async def save(limit=50, after=yesterday):
                             a.add({"message": message_id, "prompt": prompt, "url": url})
                         else:
                             print("Skipping: Image already saved")
+    x = requests.get("http://localhost:3000/api/images/loadJson")
+    print(x.status_code)
 
 
 load_dotenv()

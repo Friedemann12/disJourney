@@ -15,6 +15,7 @@ export default async function handler(req, res) {
             });
             res.end()
         } else if (query === "loadJson") {
+            console.log("loading new Images")
             images = JSON.parse(await fs.readFile(path.join(process.cwd(), "/../") + "db.json", "utf-8"));
             res.status(200)
             res.end()
