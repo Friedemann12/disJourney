@@ -67,10 +67,6 @@ export default function Home() {
         return regex.exec(prompt)[1];
     }
 
-    async function refreshImages() {
-        await fetch("/api/images/loadJson")
-    }
-
 
     return (
         <div>
@@ -91,7 +87,6 @@ export default function Home() {
                     :
                     <button onClick={newImage}>Start</button>
                 }
-                <button onClick={refreshImages} className="refreshButton"><FontAwesomeIcon icon={faRefresh}/></button>
             </div>
         </div>
     )
