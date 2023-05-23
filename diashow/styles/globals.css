@@ -37,6 +37,62 @@ body {
     background-color: transparent;
     width: 25px;
 }
-.intro{
+
+.intro {
     font-weight: bold;
+}
+
+.startDiashowContainer {
+    width: 100%;
+    height: 100vh;
+}
+
+.startDiashow {
+    margin: 25% auto auto auto;
+    text-align: center;
+    font-size: 75px;
+    text-decoration-line: underline;
+    cursor: pointer;
+}
+
+.imagecounter {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 10px;
+    font-size: 20px;
+    z-index: 999999;
+    background-color: #0000db
+}
+
+.nextImageButton {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 10px;
+    font-size: 20px;
+    text-decoration-line: underline;
+    cursor: pointer;
+    z-index: 999999;
+    background-color: #0000db;
+}
+
+.contextMenuContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: baseline;
+    position: absolute;
+    height: 2.5em;
+    width: fit-content;
+    z-index: 999999;
+    background-color: #0000db;
+}
+
+.contextMenuContainer p {
+    width: 8em;
+    text-align: center;
+    cursor: pointer;
+    margin: 8% auto auto auto;
+    text-decoration: underline;
 }

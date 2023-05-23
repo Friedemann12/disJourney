@@ -3,6 +3,7 @@ import React, {useEffect} from 'react';
 import Image from 'next/image';
 import {faRefresh} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import ContextMenu from "../components/contextMenu";
 
 async function getRandomImage() {
     return fetch("/api/images/getNextImage").then((res) => res.json());
@@ -17,27 +18,51 @@ type discordImage = {
 //45000
 const timeToNextImage = 45000
 export default function Home() {
-    const [test, setTest] = React.useState<discordImage>({
+    const [discordImage, setDiscordImage] = React.useState<discordImage>({
         message: "",
         prompt: "",
         url: "",
         id: ""
     });
-    const [isNewText, setIsNewText] = React.useState(false);
+    const [showContextMenu, setShowContextMenu] = React.useState(false);
+    const [contextMenuX, setContextMenuX] = React.useState(0);
+    const [contextMenuY, setContextMenuY] = React.useState(0);
+    const [total, setTotal] = React.useState(0);
+    const [index, setIndex] = React.useState(0);
 
-    function setTestAndPrompt(data) {
-        setTest(data);
+    function setDiscordImageAndPrompt(data) {
+        setDiscordImage(data);
         if (data.prompt.length >= 750) {
             data.prompt = data.prompt.substring(0, 750) + "..."
         }
-        typeWriter(0, getPrompt(data.prompt))
     }
+
+    useEffect(() => {
+        let i = 0
+        const id = setInterval(() => {
+            if (document.getElementById("prompting") === null) return;
+            if (i === 0) {
+                document.getElementById("prompting").innerHTML = "";
+            }
+            typeWriter(i, getPrompt(discordImage.prompt))
+            i++;
+        }, discordImage.prompt.length >= 500 ? 10 : 50);
+        return () => clearInterval(id);
+    }, [discordImage])
 
     const delay = ms => new Promise(res => setTimeout(res, ms));
 
     async function newImage() {
+        setDiscordImageAndPrompt({
+            message: discordImage.message,
+            prompt: "",
+            url: discordImage.url,
+            id: discordImage.id
+        })
         let bla = await getRandomImage();
-        setTestAndPrompt(bla.data);
+        setTotal(bla.total)
+        setIndex(bla.index)
+        setDiscordImageAndPrompt(bla.data);
     }
 
     useEffect(() => {
@@ -47,22 +72,14 @@ export default function Home() {
         return () => clearInterval(id);
     })
 
-    async function typeWriter(i = 0, text = getPrompt(test.prompt)) {
-        if (i === 0) {
-            await delay(250);
-            document.getElementById("prompting").innerHTML = "";
-        }
-        if (i < text.length && !isNewText) {
-            document.getElementById("prompting").innerHTML += text.charAt(i);
-            i++;
-            setTimeout(function () {
-                typeWriter(i, text)
-            }, text.length >= 500 ? 10 : 50);
-        }
+    function typeWriter(i = 0, text = getPrompt(discordImage.prompt)) {
+        if (document.getElementById("prompting") === null) return;
+        document.getElementById("prompting").innerHTML += text.charAt(i);
     }
 
 
     function getPrompt(prompt: string): string {
+        if (prompt === "" || prompt === null || prompt === undefined) return "";
         const regex = new RegExp('\\*\\*(.*?)\\*\\*', 'gm')
         return regex.exec(prompt)[1];
     }
@@ -75,17 +92,27 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
             <div>
-                {test.url !== "" ?
+                {discordImage.url !== "" ?
+
                     <div className="imageContainer">
+                        <ContextMenu
+                            targetId='image'
+                            imageUrl={discordImage.url}
+                            imageName={"Image_#" + index + ".png"}
+                        />
                         <p className="prompt"><span className="prompting intro">_prompt:&nbsp;</span>
                             <span id="prompting" className="prompting"></span>
                         </p>
-                        <Image src={test.url} alt="moin" width={0}
+                        <p className={"imagecounter"}>image #{index}/{total}</p>
+                        <Image src={discordImage.url} alt="moin" width={0}
                                height={0}
-                               sizes="100vw" className="image"/>
+                               sizes="100vw" className="image" id="image"/>
+                        <p className={"nextImageButton"} onClick={newImage}>next image</p>
                     </div>
                     :
-                    <button onClick={newImage}>Start</button>
+                    <div className={"startDiashowContainer"}>
+                        <p className={"startDiashow"} onClick={newImage}>start</p>
+                    </div>
                 }
             </div>
         </div>
